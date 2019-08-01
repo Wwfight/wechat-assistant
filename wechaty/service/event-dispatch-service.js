@@ -38,9 +38,16 @@ async function dispatchEventContent(eName, msg) {
     case 'rkl':
       content = await api.getRkl(msg);
       break;
+    case 'twqh':
+      content = await api.getSweetWord();
+      break;
+    case 'tq':
+      content = await api.getWeather(msg);
+      break;
     default:
       break;
   }
+  console.log(content)
   return content;
 }
 

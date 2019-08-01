@@ -183,7 +183,7 @@ async function filterFriendMsg(msg, name, id) {
  * 1 开启了好友验证 || 朋友推荐消息 || 发送的文字消息过长,大于40个字符
  * 2 初次添加好友
  */
-async function filterRoomMsg(msg, name, id) {
+async function filterRoomMsg(roomName,msg, name, id) {
     let obj = {type: '', content: '', event: {}}
     if (config.KEYWORDLIST && config.KEYWORDLIST.length > 0) {
         for (let item of config.KEYWORDLIST) {
@@ -226,9 +226,14 @@ async function filterRoomMsg(msg, name, id) {
             }
         }
     }
-
-    obj.type = 'text'
-    obj.content = await dispatch.dispatchAiBot(config.DEFAULTBOT, msg, name, id)
+    const isClose = config.SHIELDROOMLIST.includes(roomName)
+    if(isClose){
+        obj.type = 'text'
+        obj.content = ''
+    }else {
+        obj.type = 'text'
+        obj.content = await dispatch.dispatchAiBot(config.DEFAULTBOT, msg, name, id)
+    }
     return obj
 }
 

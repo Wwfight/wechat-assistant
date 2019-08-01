@@ -9,7 +9,7 @@ const service = require('../service/msg-filter-service');
 async function getEveryDayRoomContent(sortId, endWord = '微信小助手') {
   let today = lib.formatDate(new Date()); //获取今天的日期
   let news = await api.getNews(sortId);
-  let content = `${today}<br>${news}<br>————————${endWord}`;
+  let content = `${today}<br>${news}<br>      ————————${endWord}`;
   return content;
 }
 /**
@@ -23,12 +23,12 @@ async function getEveryDayContent(date, city, endWord) {
   let weather = await api.getTXweather(city); //获取天气信息
   let today = lib.formatDate(new Date()); //获取今天的日期
   let memorialDay = lib.getDay(date); //获取纪念日天数
-  let sweetWord = await api.getSweetWord(); // 土味情话
-  let str = `${today}<br>我们认识的第${memorialDay}天<br><br>今日天气<br>${
+ // let sweetWord = await api.getSweetWord(); // 土味情话
+  let str = `早啊☀<br>${today}<br>我们认识的第${memorialDay}天<br><br>今日天气<br>${
     weather.weatherTips
   }<br>${
     weather.todayWeather
-  }<br>每日一句:<br>${one}<br><br>情话对你说:<br>${sweetWord}<br><br>————————${endWord}`;
+  }<br>每日一句:<br>${one}<br><br>      ————————${endWord}`;
   return str;
 }
 
@@ -123,9 +123,9 @@ async function getContactTextReply(that, contact, msg) {
  * @param {*} name 发消息者昵称
  * @param {*} id 发消息者id
  */
-async function getRoomTextReply(content,name,id){
+async function getRoomTextReply(roomName,content,name,id){
   console.log('room content',content)
-  let result = await service.filterRoomMsg(content,name, id);
+  let result = await service.filterRoomMsg(roomName,content,name, id);
   if (result.type == 'text') {
     return result.content;
   } else if (result.type == 'event') {

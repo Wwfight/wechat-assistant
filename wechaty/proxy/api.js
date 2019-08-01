@@ -313,6 +313,47 @@ async function getSweetWord() {
 }
 
 /**
+ * 私聊获取天气
+ */
+
+async function getWeather(city) {
+  city = city.split('天气')[0]
+  if(!city){
+    return '格式有误：示例（苏州天气）'
+  }
+  try {
+    let option = {
+      method: 'GET',
+      url: apiConfig.TXWEATHER,
+      params: { key: config.HFAPIKEY, location: city }
+    };
+    let res = await req(option);
+    let content = parseBody(res);
+    let endWord = config.endWord
+    if (content.HeWeather6[0].status=='ok') {
+      let todayInfo = content.HeWeather6[0];
+      let obj = {
+        weatherTips: `${todayInfo.lifestyle[0].brf}，${todayInfo.lifestyle[0].txt}`,
+        todayWeather: `<br>今天:${todayInfo.daily_forecast[0].cond_txt_d}<br>温度:${todayInfo.daily_forecast[0].tmp_min}° / ${
+            todayInfo.daily_forecast[0].tmp_max
+            }°<br>${todayInfo.daily_forecast[0].wind_dir} ${todayInfo.daily_forecast[0].wind_sc}级<br>空气:${
+            todayInfo.lifestyle[7].brf
+            }<br>${todayInfo.lifestyle[7].txt}<br>`
+      };
+      let str =  `今日天气<br>${
+          obj.weatherTips
+  }<br>${
+          obj.todayWeather
+  }<br><br>      ————————${endWord}`;
+  return str;
+    } else {
+      return '格式有误：示例（苏州天气）'
+    }
+  } catch (err) {
+    console.log('获取天气接口失败', err);
+  }
+}
+/**
  * 获取天行天气
  */
 async function getTXweather(city) {
@@ -328,7 +369,7 @@ async function getTXweather(city) {
       let todayInfo = content.HeWeather6[0];
       let obj = {
         weatherTips: `${todayInfo.lifestyle[0].brf}，${todayInfo.lifestyle[0].txt}`,
-        todayWeather: `今天:${todayInfo.daily_forecast[0].cond_txt_d}<br>温度:${todayInfo.daily_forecast[0].tmp_min}°/ ${
+        todayWeather: `<br>今天:${todayInfo.daily_forecast[0].cond_txt_d}<br>温度:${todayInfo.daily_forecast[0].tmp_min}° / ${
             todayInfo.daily_forecast[0].tmp_max
         }°<br>${todayInfo.daily_forecast[0].wind_dir} ${todayInfo.daily_forecast[0].wind_sc}级<br>空气:${
             todayInfo.lifestyle[7].brf
@@ -336,7 +377,7 @@ async function getTXweather(city) {
       };
       return obj;
     } else {
-      console.log('获取天气接口失败', content.msg);
+      return '请求出错啦~反馈给旺旺吧'
     }
   } catch (err) {
     console.log('获取天气接口失败', err);
@@ -382,7 +423,7 @@ async function getMingYan() {
     let content = parseBody(res);
     if (content.code === 200) {
       let newList = content.newslist;
-      let news =`${newList[0].content}<br>——————————${newList[0].author}` 
+      let news =`${newList[0].content}<br>      ——————————${newList[0].author}`
       return news;
     }
   } catch (error) {
@@ -431,6 +472,8 @@ async function getXing(name) {
       let newList = content.newslist;
       let news =`${newList[0].content}` 
       return news;
+    } else {
+      return '请输入正确的姓氏😊'
     }
   } catch (error) {
     console.log('获取天行姓氏起源失败', error);
@@ -463,6 +506,7 @@ async function getSkl() {
  * 获取老黄历
  */
 async function getLunar(date) {
+  date = date.split('老黄历 ')[0].replace(/\s+/g, "");
   try {
     let option = {
       method: 'GET',
@@ -473,8 +517,10 @@ async function getLunar(date) {
     let content = parseBody(res);
     if (content.code === 200) {
       let item = content.newslist[0];
-      let news =`<br>阳历：${item.gregoriandate}<br>阴历：${item.lunardate}<br>节日：${item.lunar_festival}<br>适宜：${item.fitness}<br>不宜：${item.taboo}<br>神位：${item.shenwei}<br>胎神：${item.taishen}<br>冲煞：${item.chongsha}<br>岁煞：${item.suisha}` 
+      let news =`阳历：${item.gregoriandate.substring(0, 10)}<br>阴历：${item.lunardate}<br>节日：${item.lunar_festival || '不是节日'}<br>适宜：${item.fitness}<br>不宜：${item.taboo}<br>神位：${item.shenwei}<br>胎神：${item.taishen}<br>冲煞：${item.chongsha}<br>岁煞：${item.suisha}`
       return news;
+    }else {
+      return '格式有误，示例：老黄历+空格+2019-1-1';
     }
   } catch (error) {
     console.log('获取天行老黄历失败', error);
@@ -549,6 +595,7 @@ module.exports = {
   getResByTXTL,
   getResByTX,
   getResByTL,
+  getWeather,
   getTXweather,
   getRubbishType,
   getSweetWord,

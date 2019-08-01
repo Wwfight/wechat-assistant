@@ -9,7 +9,7 @@ module.exports = {
   TXTLBOT: 'http://api.tianapi.com/txapi/tuling/', // 天行图灵机器人
   TXRUBBISH: 'http://api.tianapi.com/txapi/lajifenlei/',// 天行垃圾分类
   TXLOVE: 'http://api.tianapi.com/txapi/saylove/', // 天行土情话
-  TXWEATHER: 'https://free-api.heweather.com/s6/weather', // 天行天气
+  TXWEATHER: 'https://free-api.heweather.com/s6/weather', // 和风天气
   TXDAYNEWS: 'http://api.tianapi.com/allnews/',// 天行每日新闻
   TXMINGYAN: 'http://api.tianapi.com/txapi/mingyan/',// 天行名人名言
   TXSTAR: 'http://api.tianapi.com/txapi/star/',// 天行星座运势
