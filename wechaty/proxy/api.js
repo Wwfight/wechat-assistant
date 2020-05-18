@@ -470,7 +470,7 @@ async function getXing(name) {
     let content = parseBody(res);
     if (content.code === 200) {
       let newList = content.newslist;
-      let news =`${newList[0].content}` 
+      let news =`${newList[0].content}`
       return news;
     } else {
       return '请输入正确的姓氏😊'
@@ -494,7 +494,7 @@ async function getSkl() {
     let content = parseBody(res);
     if (content.code === 200) {
       let newList = content.newslist;
-      let news =`${newList[0].content}` 
+      let news =`${newList[0].content}`
       return news;
     }
   } catch (error) {
@@ -541,7 +541,7 @@ async function getGoldReply() {
     let content = parseBody(res);
     if (content.code === 200) {
       let item = content.newslist[0];
-      let news =`标题："${item.title}"<br>回复：${item.content}` 
+      let news =`标题："${item.title}"<br>回复：${item.content}`
       return news;
     }
   } catch (error) {
@@ -562,7 +562,7 @@ async function getXhy() {
     let content = parseBody(res);
     if (content.code === 200) {
       let item = content.newslist[0];
-      let news =`${item.quest}————${item.result}` 
+      let news =`${item.quest}————${item.result}`
       return news;
     }
   } catch (error) {
@@ -583,7 +583,28 @@ async function getRkl() {
     let content = parseBody(res);
     if (content.code === 200) {
       let item = content.newslist[0];
-      let news =`${item.content}` 
+      let news =`${item.content}`
+      return news;
+    }
+  } catch (error) {
+    console.log('获取天行绕口令失败', error);
+  }
+}
+/**
+ * 天行绕口令
+ */
+async function getCYJL() {
+  try {
+    let option = {
+      method: 'GET',
+      url: apiConfig.TXCYJL,
+      params: { key: config.TXAPIKEY,num:1 }
+    };
+    let res = await req(option);
+    let content = parseBody(res);
+    if (content.code === 200) {
+      let item = content.newslist[0];
+      let news =`${item.content}`
       return news;
     }
   } catch (error) {
@@ -613,5 +634,6 @@ module.exports = {
   getRkl,
   setUserInfo,
   getUserInfo,
-  updateUserInfo
+  updateUserInfo,
+  getCYJL
 };

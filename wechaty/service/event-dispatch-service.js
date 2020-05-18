@@ -44,6 +44,9 @@ async function dispatchEventContent(eName, msg) {
     case 'tq':
       content = await api.getWeather(msg);
       break;
+    case 'cyjl':
+      content = await api.getCYJL(msg);
+      break;
     default:
       break;
   }
